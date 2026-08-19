@@ -1,0 +1,56 @@
+{
+  "name": "dsh-web-search-searxng",
+  "version": "0.1.0",
+  "description": "SearXNG-backed web search provider for the DeepSeek Harness web capability seam (ctx.web)",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "searxng",
+    "web-search",
+    "plugin",
+    "cordis"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./invariant": {
+      "types": "./lib/invariant.d.ts",
+      "default": "./lib/invariant.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:e2e": "vitest run tests/searxng.e2e.ts",
+    "benchmark": "tsx benchmark.ts",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "^3.18.1"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=4.0.1",
+    "@deepseek-ai/dsh-invariants": ">=0.0.1-rc.1",
+    "@deepseek-ai/dsh-launch-environment": ">=0.0.1-rc.3",
+    "@deepseek-ai/dsh-web": ">=0.0.1-rc.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.0.0"
+  }
+}
