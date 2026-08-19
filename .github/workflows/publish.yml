@@ -1,20 +1,20 @@
 name: publish
 
-# Publish dsh-searxng-search to npm.
+# Publish dsh-searxng-search to npm via npm trusted publishing (OIDC).
+#
+# No npm token is used: the job's `id-token: write` permission lets npm's CLI
+# exchange the GitHub Actions OIDC token with the registry, and npmjs.com
+# authorizes this repository (owner/repo must be registered under
+# npmjs.com → Access Tokens → Trusted publishing).
 #
 # Triggers:
 #   - push a version tag (e.g. `v0.1.2` after bumping package.json) →
-#     validates tag == package.json version, then publishes
+#     validates tag == package.json version, then publishes with provenance
 #   - manual `workflow_dispatch` run with "dry_run" checked → packs and
 #     validates the tarball WITHOUT publishing (CI smoke test)
 #
 # lib/ is committed to this repo (built with `pnpm build`), so the publish
 # job does not need a harness checkout or the @deepseek-ai types to compile.
-# Auth: the npm token stored in the `NPM_TOKEN` secret must be a granular
-# access token with bypass-2FA publish permission for dsh-searxng-search
-# (https://docs.npmjs.com/creating-and-viewing-access-tokens/).
-# Future: replace the token with npm trusted publishing (OIDC) — keep the
-# `id-token: write` permission below for that migration.
 
 on:
   push:
@@ -40,7 +40,6 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-          registry-url: https://registry.npmjs.org/
 
       - name: Validate version matches tag
         if: startsWith(github.ref, 'refs/tags/v')
@@ -55,8 +54,6 @@ jobs:
       - name: Pack and validate tarball
         run: npm pack --dry-run
 
-      - name: Publish to npm
+      - name: Publish to npm (trusted publishing)
         if: ${{ !inputs.dry_run }}
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public

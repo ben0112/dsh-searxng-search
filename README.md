@@ -110,7 +110,7 @@ The `.github/workflows/publish.yml` workflow publishes to npm automatically:
 
 A manual run is also available under **Actions → publish → Run workflow** with a `dry_run` toggle to test the pipeline without publishing.
 
-The `NPM_TOKEN` repository secret must be a granular access token with bypass-2FA publish permission for this package (see the workflow file for notes; trusted publishing via OIDC is the planned replacement).
+The `dsh-searxng-search` package publishes through **npm trusted publishing (OIDC)** — no npm token is stored in the repository. Register the repository (`ben0112/dsh-searxng-search`) under npmjs.com → Access Tokens → Trusted publishing; the workflow then authenticates via the GitHub Actions OIDC token (`id-token: write`) and runs `npm publish --provenance`.
 
 ## License
 
