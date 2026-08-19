@@ -35,6 +35,12 @@ A dsh profile's `cordis.patch.yml` is the plugin layer that stays out of the har
 git clone https://github.com/ben0112/dsh-web-search-searxng.git
 cd dsh-web-search-searxng
 pnpm install
+
+# The @deepseek-ai seam packages are still pre-release on npm, so link them
+# from a DeepSeek Harness checkout for build/test (default path:
+# ~/deepseek-harness, or pass the checkout path as an argument):
+scripts/link-dev-deps.sh /path/to/deepseek-harness
+
 pnpm build
 
 # Make the package resolvable from your profile (peers resolve via the
@@ -72,6 +78,7 @@ The profile patch hot-reloads on long-lived surfaces; restart `dsh web` if it do
 
 ```sh
 pnpm install
+scripts/link-dev-deps.sh /path/to/deepseek-harness   # link @deepseek-ai seam packages
 pnpm build       # tsc → lib/ (ESM + d.ts)
 pnpm test        # unit tests (fetch mocked; no network)
 pnpm test:e2e    # real-instance smoke; self-skips without $SEARXNG_BASE_URL
