@@ -5,7 +5,7 @@
  * instance's upstream engines return snippets but no generated answer, so `content` is
  * omitted; entries without a URL are dropped. Provider-specific controls (language,
  * categories, safe search, time range) are deployment config, not seam or model arguments.
- * @module dsh-web-search-searxng/provider
+ * @module dsh-searxng-search/provider
  */
 
 import { WebError } from '@deepseek-ai/dsh-web'

@@ -1,13 +1,13 @@
 /**
- * Package-owned invariant companion for `dsh-web-search-searxng`.
- * @module dsh-web-search-searxng/invariant
+ * Package-owned invariant companion for `dsh-searxng-search`.
+ * @module dsh-searxng-search/invariant
  */
 
 /* jscpd:ignore-start */
 import type { Context } from '@deepseek-ai/cordis'
 import type { InvariantInstaller } from '@deepseek-ai/dsh-invariants'
 
-const PACKAGE_NAME = 'dsh-web-search-searxng'
+const PACKAGE_NAME = 'dsh-searxng-search'
 
 /** Cordis companion plugin name. */
 export const name = 'web-search-searxng-invariant'

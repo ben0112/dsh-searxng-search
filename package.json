@@ -1,5 +1,5 @@
 {
-  "name": "dsh-web-search-searxng",
+  "name": "dsh-searxng-search",
   "version": "0.1.0",
   "description": "SearXNG-backed web search provider for the DeepSeek Harness web capability seam (ctx.web)",
   "keywords": [
@@ -47,6 +47,20 @@
     "@deepseek-ai/dsh-invariants": ">=0.0.1-rc.1",
     "@deepseek-ai/dsh-launch-environment": ">=0.0.1-rc.3",
     "@deepseek-ai/dsh-web": ">=0.0.1-rc.1"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-invariants": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-launch-environment": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-web": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "tsx": "^4.19.0",

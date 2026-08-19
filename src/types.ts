@@ -3,7 +3,7 @@
  * The instance must enable the JSON output format (`search.formats` in its
  * `settings.yml`); the wire shape is provider-private and does not depend on
  * any other harness seam.
- * @module dsh-web-search-searxng/types
+ * @module dsh-searxng-search/types
  */
 
 /** One SearXNG result entry; every portable field is optional in the wild. */

@@ -1,4 +1,4 @@
-# dsh-web-search-searxng
+# dsh-searxng-search
 
 A [SearXNG](https://docs.searxng.org/)-backed web search provider for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) web capability seam (`ctx.web`).
 
@@ -25,6 +25,8 @@ search:
     - json
 ```
 
+The `@deepseek-ai/*` seam packages are declared as **optional peers**: the harness that loads this plugin already provides them (the launcher's `$DSH_HOME/profiles/node_modules` fallback), so npm/pnpm must not try to resolve them from the registry — the pre-release `@deepseek-ai` tree there is incomplete. Install this plugin into a profile; do not install the seam packages from npm.
+
 ## Install into a DeepSeek Harness profile
 
 A dsh profile's `cordis.patch.yml` is the plugin layer that stays out of the harness project. Two ways to make the package resolvable:
@@ -32,8 +34,8 @@ A dsh profile's `cordis.patch.yml` is the plugin layer that stays out of the har
 ### Option A — local build (no npm publish needed)
 
 ```sh
-git clone https://github.com/ben0112/dsh-web-search-searxng.git
-cd dsh-web-search-searxng
+git clone https://github.com/ben0112/dsh-searxng-search.git
+cd dsh-searxng-search
 pnpm install
 
 # The @deepseek-ai seam packages are still pre-release on npm, so link them
@@ -46,14 +48,14 @@ pnpm build
 # Make the package resolvable from your profile (peers resolve via the
 # harness's own $DSH_HOME/profiles/node_modules fallback):
 mkdir -p ~/.dsh/profiles/web/node_modules
-ln -s "$PWD" ~/.dsh/profiles/web/node_modules/dsh-web-search-searxng
+ln -s "$PWD" ~/.dsh/profiles/web/node_modules/dsh-searxng-search
 ```
 
 ### Option B — from npm (once published)
 
 ```sh
 cd ~/.dsh/profiles/web
-pnpm add dsh-web-search-searxng
+pnpm add dsh-searxng-search
 ```
 
 ### Enable the plugin
@@ -63,7 +65,7 @@ Add to `~/.dsh/profiles/web/cordis.patch.yml` (replace the whole `web` row's con
 ```yaml
 - insert:
     - id: web-search-searxng
-      name: 'dsh-web-search-searxng'
+      name: 'dsh-searxng-search'
       config:
         baseURL: https://searxng.example.com
 

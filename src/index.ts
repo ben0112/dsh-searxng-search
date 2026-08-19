@@ -1,11 +1,11 @@
 /**
- * `dsh-web-search-searxng`: registers a SearXNG-backed `WebSearchProvider`
+ * `dsh-searxng-search`: registers a SearXNG-backed `WebSearchProvider`
  * with `ctx.web`. A function/namespace plugin (NOT a default-export service): a search
  * provider does not own the `ctx.web` key — it registers INTO the seam's provider
  * registry, exactly as `@deepseek-ai/dsh-llm-deepseek` registers an adapter into
  * `ctx.llm`. The key is owned by `@deepseek-ai/dsh-web`.
  *
- * @module dsh-web-search-searxng
+ * @module dsh-searxng-search
  */
 
 import type { Context } from '@deepseek-ai/cordis'
