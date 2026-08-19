@@ -1,20 +1,12 @@
 name: publish
 
 # Publish dsh-searxng-search to npm via npm trusted publishing (OIDC).
+# Mirrors the official example: https://docs.npmjs.com/trusted-publishers/
 #
-# No npm token is used: the job's `id-token: write` permission lets npm's CLI
-# exchange the GitHub Actions OIDC token with the registry, and npmjs.com
-# authorizes this repository (owner/repo must be registered under
-# npmjs.com → Access Tokens → Trusted publishing).
-#
-# Triggers:
-#   - push a version tag (e.g. `v0.1.2` after bumping package.json) →
-#     validates tag == package.json version, then publishes with provenance
-#   - manual `workflow_dispatch` run with "dry_run" checked → packs and
-#     validates the tarball WITHOUT publishing (CI smoke test)
-#
-# lib/ is committed to this repo (built with `pnpm build`), so the publish
-# job does not need a harness checkout or the @deepseek-ai types to compile.
+# No npm token is used. The job's `id-token: write` permission lets the npm
+# CLI exchange the GitHub Actions OIDC token with the registry; npmjs.com
+# authorizes this repository under Access Tokens → Trusted publishing
+# (workflow filename: publish.yml).
 
 on:
   push:
@@ -28,8 +20,8 @@ on:
         default: false
 
 permissions:
-  contents: read
   id-token: write
+  contents: read
 
 jobs:
   publish:
@@ -39,7 +31,9 @@ jobs:
 
       - uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false
 
       - name: Validate version matches tag
         if: startsWith(github.ref, 'refs/tags/v')
@@ -54,6 +48,6 @@ jobs:
       - name: Pack and validate tarball
         run: npm pack --dry-run
 
-      - name: Publish to npm (trusted publishing)
+      - name: Publish to npm (OIDC, no token)
         if: ${{ !inputs.dry_run }}
-        run: npm publish --provenance --access public
+        run: npm publish
