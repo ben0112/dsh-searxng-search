@@ -96,6 +96,22 @@ BENCH_ITERATIONS=3 SEARXNG_BASE_URL=... pnpm benchmark
 
 The DeepSeek side of the benchmark takes its key from `$DEEPSEEK_API_KEY`, or from the harness credentials document at `$DSH_HOME/.credentials.yaml`.
 
+## Publish to npm (GitHub Action)
+
+The `.github/workflows/publish.yml` workflow publishes to npm automatically:
+
+1. Bump the version in `package.json` and commit (`pnpm build` first — `lib/` is committed, so rebuild and include it in the same commit).
+2. Push a version tag:
+   ```sh
+   git tag v0.1.2
+   git push github v0.1.2
+   ```
+3. The workflow validates `v<tag> == package.json version`, packs a dry-run, then runs `npm publish`.
+
+A manual run is also available under **Actions → publish → Run workflow** with a `dry_run` toggle to test the pipeline without publishing.
+
+The `NPM_TOKEN` repository secret must be a granular access token with bypass-2FA publish permission for this package (see the workflow file for notes; trusted publishing via OIDC is the planned replacement).
+
 ## License
 
 MIT

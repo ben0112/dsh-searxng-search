@@ -36,8 +36,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "test:e2e": "vitest run tests/searxng.e2e.ts",
-    "benchmark": "tsx benchmark.ts",
-    "prepack": "npm run build"
+    "benchmark": "tsx benchmark.ts"
   },
   "dependencies": {
     "@deepseek-ai/schemastery": "^3.18.1"

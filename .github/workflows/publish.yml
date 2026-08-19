@@ -1,0 +1,62 @@
+name: publish
+
+# Publish dsh-searxng-search to npm.
+#
+# Triggers:
+#   - push a version tag (e.g. `v0.1.2` after bumping package.json) →
+#     validates tag == package.json version, then publishes
+#   - manual `workflow_dispatch` run with "dry_run" checked → packs and
+#     validates the tarball WITHOUT publishing (CI smoke test)
+#
+# lib/ is committed to this repo (built with `pnpm build`), so the publish
+# job does not need a harness checkout or the @deepseek-ai types to compile.
+# Auth: the npm token stored in the `NPM_TOKEN` secret must be a granular
+# access token with bypass-2FA publish permission for dsh-searxng-search
+# (https://docs.npmjs.com/creating-and-viewing-access-tokens/).
+# Future: replace the token with npm trusted publishing (OIDC) — keep the
+# `id-token: write` permission below for that migration.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Pack and validate without publishing'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org/
+
+      - name: Validate version matches tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          pkg_version="$(node -p "require('./package.json').version")"
+          if [ "$tag_version" != "$pkg_version" ]; then
+            echo "::error::tag v$tag_version does not match package.json version $pkg_version"
+            exit 1
+          fi
+
+      - name: Pack and validate tarball
+        run: npm pack --dry-run
+
+      - name: Publish to npm
+        if: ${{ !inputs.dry_run }}
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
